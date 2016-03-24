@@ -1,0 +1,5 @@
+@charset "utf-8";
+/* CSS Document */
+@import url("phone.css") screen and (max-width:380px);
+@import url("pad.css") screen and (min-width:381px) and (max-width:680px);
+@import url("pc.css") screen and (min-width:681px);

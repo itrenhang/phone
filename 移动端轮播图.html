@@ -1,0 +1,79 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+<style>
+*{margin:0; padding:0; list-style:none;}
+html{font-size:20px;}
+div{width:16rem; height:8rem; position:relative; overflow:hidden;}
+ul{width:64rem; height:8rem; position:absolute; top:0; left:0;}
+li{width:16rem; height:8rem; float:left; text-align:center; line-height:8rem;font-size:30px;color:#fff;}
+
+</style>
+<script>
+(function(win,doc){
+	win.onload=function(){
+		doc.documentElement.style.fontSize=doc.documentElement.clientWidth*20/320+'px';	
+		win.onresize=function(){
+			doc.documentElement.style.fontSize=doc.documentElement.clientWidth*20/320+'px';	
+		};
+	};	
+})(window,document);
+document.addEventListener('DOMContentLoaded',function(){
+	var oUl=document.querySelector('ul');
+	var aLi=document.querySelectorAll('li');
+	var x=0;
+	var iNow=0;
+	oUl.addEventListener('touchstart',function(ev){
+		var downX=ev.targetTouches[0].pageX;
+		var disX=downX-x;
+		function fnMove(ev){
+			x=ev.targetTouches[0].pageX-disX;
+			oUl.style.WebkitTransform='translate3d('+x+'px,0,0)';
+			oUl.style.WebkitTransition='none';
+		}
+		function fnEnd(ev){
+			var upX=ev.changedTouches[0].pageX;
+			oUl.style.WebkitTransition='.5s all ease';
+			if(Math.abs(downX-upX)>=50){
+				if(downX<upX){
+					iNow--;
+					if(iNow<0){
+						iNow=0;	
+					}
+				}else{
+					iNow++;
+					if(iNow>aLi.length-1){
+						iNow=aLi.length-1;
+					}
+				}
+				x=-iNow*aLi[0].offsetWidth;
+				oUl.style.WebkitTransform='translate3d('+x+'px,0,0)';
+			}else{
+				x=-iNow*aLi[0].offsetWidth;
+				oUl.style.WebkitTransform='translate3d('+x+'px,0,0)';
+			}
+			document.removeEventListener('touchmove',fnMove,false);
+			document.removeEventListener('touchend',fnEnd,false);
+		}
+		document.addEventListener('touchmove',fnMove,false);
+		document.addEventListener('touchend',fnEnd,false);
+		ev.preventDefault();
+	},false);	
+},false);
+
+</script>
+</head>
+
+<body>
+	<div>
+		<ul>
+			<li style="background:#0F0">1</li>
+			<li style="background:#0FC">2</li>
+			<li style="background:#C09">3</li>
+		</ul>
+	</div>
+</body>
+</html>

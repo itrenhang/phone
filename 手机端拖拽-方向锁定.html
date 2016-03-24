@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+<style>
+*{margin:0; padding:0;}
+#div1{width:100px; height:100px; background:red; position:absolute; top:0; padding:0;}
+</style>
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+	function drag(obj){
+		var x=0;
+		var y=0;
+		var dir='';
+		obj.addEventListener('touchstart',function(ev){
+			var id=ev.targetTouches[0].identifier;
+			var downX=ev.targetTouches[0].pageX
+			var downY=ev.targetTouches[0].pageY
+			var disX=downX-x;
+			var disY=downY-y;
+			function fnMove(ev){
+				if(ev.targetTouches[0].identifier==id){
+					if(dir==''){
+						if(Math.abs(ev.targetTouches[0].pageX-downX)>=10){
+							dir='l';
+						}else if(Math.abs(ev.targetTouches[0].pageY-downY)>=10){
+							dir='t';
+						}
+					}
+					if(dir=='l'){
+						x=ev.targetTouches[0].pageX-disX;
+					}else if(dir=='t'){
+						y=ev.targetTouches[0].pageY-disY;
+					}
+					obj.style.WebkitTransform='translate3d('+x+'px,'+y+'px,0px)';
+					obj.style.MozTransform='translate3d('+x+'px,'+y+'px,0px)';
+					obj.style.msTransform='translate3d('+x+'px,'+y+'px,0px)';
+					obj.style.transform='translate3d('+x+'px,'+y+'px,0px)';
+				}
+			}
+			function fnEnd(ev){
+				if(ev.changedTouches[0].identifier==id){
+					dir='';
+					document.removeEventListener('touchmove',fnMove,false);
+					document.removeEventListener('touchend',fnEnd,false);
+				}
+			}
+			document.addEventListener('touchmove',fnMove,false);
+			document.addEventListener('touchend',fnEnd,false);
+			ev.preventDefault();
+			
+		},false);	
+	}
+	
+	var oDiv=document.querySelector('#div1');
+	drag(oDiv);
+	
+},false);
+</script>
+</head>
+
+<body>
+	<div id="div1"></div>
+</body>
+</html>

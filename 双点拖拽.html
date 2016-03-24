@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+<title>无标题文档</title>
+<style>
+*{margin:0; padding:0;}
+div{width:200px; height:200px; background:red; margin:100px auto; }
+</style>
+<script>
+function a2b(n){
+	return n*180/Math.PI;
+}
+document.addEventListener('DOMContentLoaded',function(){
+	var oDiv=document.querySelector('div');
+	var x=0;
+	var y=0
+	oDiv.addEventListener('touchstart',function(ev){
+		function getDis(ev){
+			var x1=ev.targetTouches[0].pageX;
+			var y1=ev.targetTouches[0].pageY;
+			var x2=ev.targetTouches[1].pageX;
+			var y2=ev.targetTouches[1].pageY;
+			var x=(x1+x2)/2;
+			var y=(y1+y2)/2;
+			return {x:x,y:y}
+			//return {x:x1,y:y1}
+		}
+		var disX=getDis(ev).x-x;
+		var disY=getDis(ev).y-y;
+		function fnMove(ev){
+			x=getDis(ev).x-disX;
+			y=getDis(ev).y-disY;
+			oDiv.style.WebkitTransform='translate3d('+x+'px,'+y+'px,0)';
+		}
+		function fnEnd(){
+			document.removeEventListener('touchmove',fnMove,false);
+			document.removeEventListener('touchmEnd',fnMove,false);
+		}
+		document.addEventListener('touchmove',fnMove,false);
+		document.addEventListener('touchmEnd',fnMove,false);
+		ev.preventDefault();
+	},false);
+},false);
+</script>
+</head>
+
+<body>
+	<div>asdasd</div>
+</body>
+</html>
